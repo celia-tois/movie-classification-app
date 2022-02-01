@@ -3,6 +3,7 @@ const topRatedMoviesSection = document.getElementById("top-rated-movies");
 const thrillerSection = document.getElementById("thriller-movies");
 const frenchSection = document.getElementById("french-movies");
 const movies2000sSection = document.getElementById("movies-from-2000s");
+const modal = document.getElementById("modal");
 
 const fetchData = async(url) => {
     data = await fetch(url)
@@ -17,7 +18,7 @@ const displayBestMovie = async() => {
     bestMovieSection.innerHTML = `
     <div id="best-movie-text">
         <h1>${bestMovie.title}</h1>
-        <button>Play</button>
+        <button class="open-modal">Play</button>
     </div>
     <div id="best-movie-image" style="background-image: linear-gradient(to right, #000 0%, transparent 20%), url(${bestMovie.image_url})">
         <img src=${bestMovie.image_url} alt="Movie poster"/>
@@ -48,7 +49,7 @@ const displayTopRatedMovies = async() => {
         <h2>Top rated movies</h2>
         <div class="movies">
         ${bestMovies
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster"/>`))
+            .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
             .join("")}
         </div>
         `
@@ -77,7 +78,7 @@ const displayThrillerMovies = async() => {
         <h2>Thriller</h2>
         <div class="movies">
         ${moviesToDisplay
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster"/>`))
+            .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
             .join("")}
         </div>
         `
@@ -105,7 +106,7 @@ const displayFrenchMovies = async() => {
         <h2>French movies</h2>
         <div class="movies">
         ${moviesToDisplay
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster"/>`))
+            .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
             .join("")}
         </div>
         `
@@ -137,6 +138,42 @@ const displayMoviesFrom2000s = async() => {
             .join("")}
         </div>
         `
+        
+    window.addEventListener("click", (e) => {
+        const movieSelected = moviesToDisplay.filter(movie => movie.image_url === e.target.src)
+        modal.classList.add("open-modal")
+        const displayModal = async() => {
+            await fetchData(movieSelected[0].url)
+                if(modal.classList.contains("open-modal")) {
+                    modal.innerHTML = `
+                        <img src="assets/close.svg" alt="Close button" id="close-button"/>
+                        <div id="header">
+                            <img src=${data.image_url} alt="Movie poster"/>
+                            <div id="movie-main-infos">
+                                <h1>${data.title}</h1>
+                                <p>${data.genres}</p>
+                                <p>${data.date_published}</p>
+                                <p>Duration: ${data.duration}</p>
+                                <p>Country of origin: ${data.countries}</p>
+                                <p>Rated: ${data.rated}</p>
+                                <p>Imdb score: ${data.imdb_score}</p>
+                            </div>
+                        </div>
+                        <p>Directors: ${data.directors}</p>
+                        <p>Actors: ${data.actors}</p>
+                        <p>Box office result: ${data.worldwide_gross_income}</p>
+                        <p>Description: ${data.description}</p>
+                    `
+                }
+        }
+        displayModal()
+    })
+
+    document.getElementById("close-button").addEventListener("click", (e) => {
+        console.log(e)
+    })
+
 }
 
 displayMoviesFrom2000s();
+

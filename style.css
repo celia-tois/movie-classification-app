@@ -35,7 +35,7 @@ nav li {
   width: 40%;
 }
 
-h1 {
+#best-movie-text h1 {
   color: white;
   font-size: 28px;
 }
@@ -51,13 +51,9 @@ button {
   border-radius: 4px;
 }
 
-#top-rated-movies {
-  margin: 28px 8px;
-}
-
 .movies {
   display: flex;
-  justify-content: center;
+  overflow: scroll;
 }
 
 #best-movie-image {
@@ -68,8 +64,53 @@ button {
   text-align: center;
 }
 
+section img {
+  height: 270px;
+}
+
 #best-movie-image img {
   margin: 16px;
   border: 2px solid white;
-  height: 270px;
+}
+
+.categories {
+  padding: 28px;
+  border-bottom: 8px solid black;
+}
+
+.categories img {
+  margin: 24px;
+}
+
+#modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: auto;
+  width: 50%;
+  padding: 32px;
+  border-radius: 12px;
+  background-color: rgb(34, 34, 34);
+  color: white;
+}
+
+#modal p {
+  margin-top: 10px;
+}
+
+#header {
+  display: flex;
+  margin-bottom: 32px;
+}
+
+#movie-main-infos {
+  margin: 32px 40px;
+}
+
+#close-button {
+  width: 16px;
+  position: absolute;
+  right: 32px;
+  top: -100px;
 }
