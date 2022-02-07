@@ -28,152 +28,68 @@ const displayBestMovie = async() => {
 displayBestMovie();
 
 
-const displayTopRatedMovies = async() => {
-    await fetchData("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score");
-    const bestMovies = [];
-    data.results.map(movie => (
-        bestMovies.push(movie)
-    ))
-    while (bestMovies.length < 8) {
-        await fetchData(data.next)
-        data.results.map(movie => {
-            if (bestMovies.length < 8) {
-                bestMovies.push(movie)
-            }
-            
-        })
-    }
-    bestMovies.shift();
-    
-    topRatedMoviesSection.innerHTML = `
-        <h2>Top rated movies</h2>
-        <div class="movies">
-        ${bestMovies
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
-            .join("")}
-        </div>
-        `
-}
-
-displayTopRatedMovies();
-
-
-const displayThrillerMovies = async() => {
-    await fetchData("http://localhost:8000/api/v1/titles/?genre=thriller");
-    const moviesToDisplay = []
+const displayMovies = async(url, section, title) => {
+    await fetchData(url)
+    const moviesToDisplay = [];
     data.results.map(movie => (
         moviesToDisplay.push(movie)
     ))
-    while (moviesToDisplay.length < 7) {
+    while (moviesToDisplay.length < 8) {
         await fetchData(data.next)
         data.results.map(movie => {
-            if (moviesToDisplay.length < 7) {
+            if (moviesToDisplay.length < 8) {
                 moviesToDisplay.push(movie)
             }
             
         })
     }
+    moviesToDisplay.shift();
     
-    thrillerSection.innerHTML = `
-        <h2>Thriller</h2>
+    section.innerHTML = `
+        <h2>${title}</h2>
         <div class="movies">
         ${moviesToDisplay
             .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
             .join("")}
         </div>
         `
-}
-
-displayThrillerMovies();
-
-const displayFrenchMovies = async() => {
-    await fetchData("http://localhost:8000/api/v1/titles/?lang=french");
-    const moviesToDisplay = []
-    data.results.map(movie => (
-        moviesToDisplay.push(movie)
-    ))
-    while (moviesToDisplay.length < 7) {
-        await fetchData(data.next)
-        data.results.map(movie => {
-            if (moviesToDisplay.length < 7) {
-                moviesToDisplay.push(movie)
-            }
-            
-        })
-    }
     
-    frenchSection.innerHTML = `
-        <h2>French movies</h2>
-        <div class="movies">
-        ${moviesToDisplay
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
-            .join("")}
-        </div>
-        `
-}
-
-displayFrenchMovies();
-
-const displayMoviesFrom2000s = async() => {
-    await fetchData("http://localhost:8000/api/v1/titles/?min_year=2000&max_year=2009");
-    const moviesToDisplay = []
-    data.results.map(movie => (
-        moviesToDisplay.push(movie)
-    ))
-    while (moviesToDisplay.length < 7) {
-        await fetchData(data.next)
-        data.results.map(movie => {
-            if (moviesToDisplay.length < 7) {
-                moviesToDisplay.push(movie)
-            }
-            
-        })
-    }
-    
-    movies2000sSection.innerHTML = `
-        <h2>Movies from the 2000s</h2>
-        <div class="movies">
-        ${moviesToDisplay
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster"/>`))
-            .join("")}
-        </div>
-        `
-        
-    window.addEventListener("click", (e) => {
-        const movieSelected = moviesToDisplay.filter(movie => movie.image_url === e.target.src)
-        modal.classList.add("open-modal")
-        const displayModal = async() => {
-            await fetchData(movieSelected[0].url)
-                if(modal.classList.contains("open-modal")) {
-                    modal.innerHTML = `
-                        <img src="assets/close.svg" alt="Close button" id="close-button"/>
-                        <div id="header">
-                            <img src=${data.image_url} alt="Movie poster"/>
-                            <div id="movie-main-infos">
-                                <h1>${data.title}</h1>
-                                <p>${data.genres}</p>
-                                <p>${data.date_published}</p>
-                                <p>Duration: ${data.duration}</p>
-                                <p>Country of origin: ${data.countries}</p>
-                                <p>Rated: ${data.rated}</p>
-                                <p>Imdb score: ${data.imdb_score}</p>
+    const movies = document.querySelectorAll("img")
+    movies.forEach(function (movie) {
+        movie.addEventListener("click", (e) => {
+            const movieSelected = moviesToDisplay.filter(movieToDisplay => movieToDisplay.image_url === e.explicitOriginalTarget.src)
+            console.log(movieSelected)
+            modal.classList.add("open-modal")
+            const displayModal = async() => {
+                await fetchData(movieSelected[0].url)
+                    if(modal.classList.contains("open-modal")) {
+                        modal.innerHTML = `
+                            <img src="assets/close.svg" alt="Close button" id="close-button"/>
+                            <div id="header">
+                                <img src=${data.image_url} alt="Movie poster"/>
+                                <div id="movie-main-infos">
+                                    <h1>${data.title}</h1>
+                                    <p>${data.genres}</p>
+                                    <p>${data.date_published}</p>
+                                    <p>Duration: ${data.duration}</p>
+                                    <p>Country of origin: ${data.countries}</p>
+                                    <p>Rated: ${data.rated}</p>
+                                    <p>Imdb score: ${data.imdb_score}</p>
+                                </div>
                             </div>
-                        </div>
-                        <p>Directors: ${data.directors}</p>
-                        <p>Actors: ${data.actors}</p>
-                        <p>Box office result: ${data.worldwide_gross_income}</p>
-                        <p>Description: ${data.description}</p>
-                    `
-                }
-        }
-        displayModal()
+                            <p>Directors: ${data.directors}</p>
+                            <p>Actors: ${data.actors}</p>
+                            <p>Box office result: ${data.worldwide_gross_income}</p>
+                            <p>Description: ${data.description}</p>
+                        `
+                    }
+            }
+            displayModal()
+        })
     })
-
-    document.getElementById("close-button").addEventListener("click", (e) => {
-        console.log(e)
-    })
-
 }
 
-displayMoviesFrom2000s();
-
+displayMovies("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score", topRatedMoviesSection, "Top rated movies");
+displayMovies("http://localhost:8000/api/v1/titles/?genre=thriller", thrillerSection, "Thriller");
+displayMovies("http://localhost:8000/api/v1/titles/?lang=french", frenchSection, "French movies");
+displayMovies("http://localhost:8000/api/v1/titles/?min_year=2000&max_year=2009", movies2000sSection, "Movies from the 2000s");
