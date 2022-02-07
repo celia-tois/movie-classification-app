@@ -1,9 +1,6 @@
-const bestMovieSection = document.getElementById("best-movie");
-const topRatedMoviesSection = document.getElementById("top-rated-movies");
-const thrillerSection = document.getElementById("thriller-movies");
-const frenchSection = document.getElementById("french-movies");
-const movies2000sSection = document.getElementById("movies-from-2000s");
-const modal = document.getElementById("modal");
+const modalDiv = document.createElement("div");
+const modalSection = document.getElementById("modal");
+
 
 const fetchData = async(url) => {
     data = await fetch(url)
@@ -15,10 +12,10 @@ const fetchData = async(url) => {
 const displayBestMovie = async() => {
     await fetchData("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score");
     const bestMovie = data.results[0];
-    bestMovieSection.innerHTML = `
+    document.getElementById("best-movie").innerHTML = `
     <div id="best-movie-text">
         <h1>${bestMovie.title}</h1>
-        <button class="open-modal">Play</button>
+        <button>Play</button>
     </div>
     <div id="best-movie-image" style="background-image: linear-gradient(to right, #000 0%, transparent 20%), url(${bestMovie.image_url})">
         <img src=${bestMovie.image_url} alt="Movie poster"/>
@@ -28,7 +25,7 @@ const displayBestMovie = async() => {
 displayBestMovie();
 
 
-const displayMovies = async(url, section, title) => {
+const displayMoviesSection = async(url, section, title) => {
     await fetchData(url)
     const moviesToDisplay = [];
     data.results.map(movie => (
@@ -49,47 +46,63 @@ const displayMovies = async(url, section, title) => {
         <h2>${title}</h2>
         <div class="movies">
         ${moviesToDisplay
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="open-modal"/>`))
+            .map(movie => (`<img src=${movie.image_url} alt="Movie poster"/>`))
             .join("")}
         </div>
         `
-    
+
+    displayModal(moviesToDisplay)
+}
+
+const displayModal = (moviesToDisplay) => {
     const movies = document.querySelectorAll("img")
     movies.forEach(function (movie) {
         movie.addEventListener("click", (e) => {
             const movieSelected = moviesToDisplay.filter(movieToDisplay => movieToDisplay.image_url === e.explicitOriginalTarget.src)
-            console.log(movieSelected)
-            modal.classList.add("open-modal")
-            const displayModal = async() => {
+            modalSection.appendChild(modalDiv)
+            modalDiv.classList.add("open-modal")
+            const displayModalData = async() => {
                 await fetchData(movieSelected[0].url)
-                    if(modal.classList.contains("open-modal")) {
-                        modal.innerHTML = `
-                            <img src="assets/close.svg" alt="Close button" id="close-button"/>
-                            <div id="header">
-                                <img src=${data.image_url} alt="Movie poster"/>
-                                <div id="movie-main-infos">
-                                    <h1>${data.title}</h1>
-                                    <p>${data.genres}</p>
-                                    <p>${data.date_published}</p>
-                                    <p>Duration: ${data.duration}</p>
-                                    <p>Country of origin: ${data.countries}</p>
-                                    <p>Rated: ${data.rated}</p>
-                                    <p>Imdb score: ${data.imdb_score}</p>
-                                </div>
-                            </div>
-                            <p>Directors: ${data.directors}</p>
-                            <p>Actors: ${data.actors}</p>
-                            <p>Box office result: ${data.worldwide_gross_income}</p>
-                            <p>Description: ${data.description}</p>
-                        `
-                    }
+                modalDiv.innerHTML = `
+                    <img src="assets/close.svg" alt="Close button" id="close-button"/>
+                    <div id="header">
+                        <img src=${data.image_url} alt="Movie poster"/>
+                        <div id="movie-main-infos">
+                            <h1>${data.title}</h1>
+                            <p>${data.genres}</p>
+                            <p>${data.date_published}</p>
+                            <p>Duration: ${data.duration}</p>
+                            <p>Country of origin: ${data.countries}</p>
+                            <p>Rated: ${data.rated}</p>
+                            <p>Imdb score: ${data.imdb_score}</p>
+                        </div>
+                    </div>
+                    <p>Directors: ${data.directors}</p>
+                    <p>Actors: ${data.actors}</p>
+                    <p>Box office result: ${data.worldwide_gross_income}</p>
+                    <p>Description: ${data.description}</p>
+                `
             }
-            displayModal()
+            displayModalData()
+            setTimeout(() => {
+                closeModal()
+            }, 1000)
+            
         })
     })
 }
 
-displayMovies("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score", topRatedMoviesSection, "Top rated movies");
-displayMovies("http://localhost:8000/api/v1/titles/?genre=thriller", thrillerSection, "Thriller");
-displayMovies("http://localhost:8000/api/v1/titles/?lang=french", frenchSection, "French movies");
-displayMovies("http://localhost:8000/api/v1/titles/?min_year=2000&max_year=2009", movies2000sSection, "Movies from the 2000s");
+const closeModal = () => {
+    document
+        .getElementById("close-button")
+        .addEventListener("click", (e) => {
+            modalSection.removeChild(modalDiv)
+        })
+    
+}
+
+
+displayMoviesSection("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score", document.getElementById("top-rated-movies"), "Top rated movies");
+displayMoviesSection("http://localhost:8000/api/v1/titles/?genre=thriller", document.getElementById("thriller-movies"), "Thriller");
+displayMoviesSection("http://localhost:8000/api/v1/titles/?lang=french", document.getElementById("french-movies"), "French movies");
+displayMoviesSection("http://localhost:8000/api/v1/titles/?min_year=2000&max_year=2009", document.getElementById("movies-from-2000s"), "Movies from the 2000s");

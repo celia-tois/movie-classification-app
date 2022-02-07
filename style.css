@@ -82,7 +82,7 @@ section img {
   margin: 24px;
 }
 
-#modal {
+.open-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -95,7 +95,7 @@ section img {
   color: white;
 }
 
-#modal p {
+.open-modal p {
   margin-top: 10px;
 }
 
