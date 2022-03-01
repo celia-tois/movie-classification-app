@@ -25,7 +25,7 @@ const displayBestMovie = async() => {
 displayBestMovie();
 
 
-const displayMoviesSection = async(id, section, title) => {
+const displayMoviesSection = async(id, section, title, movieContainer, goLeft, goRight) => {
     await fetchData("http://localhost:8000/api/v1/titles/?" + id)
     const moviesToDisplay = [];
     data.results.map(movie => (
@@ -45,33 +45,33 @@ const displayMoviesSection = async(id, section, title) => {
     section.innerHTML = `
         <h2>${title}</h2>
         <div id="movies-container">
-            <button id="go-left" class="carousel-btn">
+            <button id=${goLeft} class="carousel-btn">
                 <img src="assets/arrow.svg" alt="Left arrow" class="arrow"/>
             </button>
-            <div class="movies">
+            <div id=${movieContainer}>
                 ${moviesToDisplay
                     .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="movie-img"/>`))
                     .join("")}
             </div>
-            <button id="go-right" class="carousel-btn">
+            <button id=${goRight} class="carousel-btn">
                 <img src="assets/arrow.svg" alt="Right arrow" id="right-arrow" class="arrow"/>
             </button>
         </div>
         `
     displayModal(moviesToDisplay)
-    scrollLeft()
-    scrollRight()
+    scrollLeft(goLeft, movieContainer)
+    scrollRight(goRight, movieContainer)
 }
 
 
-const scrollLeft = () => {
+const scrollLeft = (goLeft, movieContainer) => {
     document
-        .querySelector("#go-left")
+        .querySelector(`#${goLeft}`)
         .addEventListener("click", (e) => {
             let movieWidth = document.querySelector(".movie-img").getBoundingClientRect().width;
-            let scrollDistance = movieWidth * 2;
+            let scrollDistance = movieWidth * 1.25;
             document
-                .querySelector(".movies")
+                .querySelector(`#${movieContainer}`)
                 .scrollBy({
                     top: 0,
                     left: -scrollDistance,
@@ -80,14 +80,14 @@ const scrollLeft = () => {
         })
 }
 
-const scrollRight = () => {
+const scrollRight = (goRight, movieContainer) => {
     document
-        .querySelector("#go-right")
+        .querySelector(`#${goRight}`)
         .addEventListener("click", (e) => {
             let movieWidth = document.querySelector(".movie-img").getBoundingClientRect().width;
-            let scrollDistance = movieWidth * 2;
+            let scrollDistance = movieWidth * 1.25;
             document
-                .querySelector(".movies")
+                .querySelector(`#${movieContainer}`)
                 .scrollBy({
                     top: 0,
                     left: +scrollDistance,
@@ -144,7 +144,7 @@ const closeModal = () => {
 }
 
 
-displayMoviesSection("sort_by=-imdb_score", document.getElementById("top-rated-movies"), "Top rated movies");
-displayMoviesSection("genre=thriller", document.getElementById("thriller-movies"), "Thriller");
-displayMoviesSection("lang=french", document.getElementById("french-movies"), "French movies");
-displayMoviesSection("min_year=2000&max_year=2009", document.getElementById("movies-from-2000s"), "Movies from the 2000s");
+displayMoviesSection("sort_by=-imdb_score", document.getElementById("top-rated-movies"), "Top rated movies", "container-1", "go-left-1", "go-right-1");
+displayMoviesSection("genre=thriller", document.getElementById("thriller-movies"), "Thriller", "container-2", "go-left-2", "go-right-2");
+displayMoviesSection("lang=french", document.getElementById("french-movies"), "French movies", "container-3", "go-left-3", "go-right-3");
+displayMoviesSection("min_year=2000&max_year=2009", document.getElementById("movies-from-2000s"), "Movies from the 2000s", "container-4", "go-left-4", "go-right-4");

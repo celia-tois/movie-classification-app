@@ -52,10 +52,12 @@ nav li {
   cursor: pointer;
 }
 
-.movies {
+#container-1,
+#container-2,
+#container-3,
+#container-4 {
   display: flex;
   overflow-x: hidden;
-  margin: 0 20px;
 }
 
 #best-movie-image {
