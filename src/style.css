@@ -2,11 +2,16 @@
   margin: 0;
   font-family: "Montserrat", sans-serif;
 }
+
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px;
+}
+
+span {
+  font-weight: bold;
 }
 
 #logo {
@@ -20,6 +25,11 @@ nav ul {
 nav li {
   list-style-type: none;
   margin-right: 28px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
 
 #best-movie {
@@ -40,7 +50,7 @@ nav li {
   font-size: 28px;
 }
 
-#play-btn {
+#infos-btn {
   background-color: white;
   border: none;
   text-transform: uppercase;
@@ -71,6 +81,7 @@ nav li {
 
 #movies-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -100,6 +111,7 @@ section .movie-img {
 }
 
 .categories {
+  margin: 0 10%;
   padding: 28px;
   border-bottom: 8px solid black;
 }
@@ -120,23 +132,16 @@ section .movie-img {
   border-radius: 12px;
   background-color: rgb(34, 34, 34);
   color: white;
+  box-shadow: 0 0 10px black;
 }
 
 .open-modal p {
   margin-top: 10px;
 }
 
-#header {
-  display: flex;
-  margin-bottom: 32px;
-}
-
 #modal-img {
   height: 270px;
-}
-
-#movie-main-infos {
-  margin: 32px 0 32px 40px;
+  border-radius: 4px;
 }
 
 #close-button {
@@ -144,4 +149,30 @@ section .movie-img {
   position: absolute;
   right: 32px;
   cursor: pointer;
+}
+
+@media (max-width: 810px) {
+  #header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #modal-img {
+    width: 180px;
+    height: auto;
+    align-self: center;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 810px) {
+  #header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  #movie-main-infos {
+    margin-left: 40px;
+  }
 }
