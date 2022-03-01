@@ -58,6 +58,7 @@ nav li {
 #container-4 {
   display: flex;
   overflow-x: hidden;
+  margin: 0 20px;
 }
 
 #best-movie-image {
