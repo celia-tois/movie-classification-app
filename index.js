@@ -135,44 +135,6 @@ const displayModal = (moviesToDisplay, selector) => {
     })
 }
 
-const displayBestMovieModal = (moviesToDisplay) => {
-    const movies = document.querySelectorAll("#play-btn")
-    movies.forEach(function (movie) {
-        movie.addEventListener("click", (e) => {
-            console.log(e.explicitOriginalTarget.parentElement.parentElement.children[1].children[0].src)
-            const movieSelected = moviesToDisplay.filter(movieToDisplay => movieToDisplay.image_url === e.explicitOriginalTarget.src)
-            modalSection.appendChild(modalDiv)
-            modalDiv.classList.add("open-modal")
-            const displayModalData = async() => {
-                await fetchData(movieSelected[0].url)
-                modalDiv.innerHTML = `
-                    <img src="assets/close.svg" alt="Close button" id="close-button"/>
-                    <div id="header">
-                        <img src=${data.image_url} alt="Movie poster" id="modal-img"/>
-                        <div id="movie-main-infos">
-                            <h1>${data.title}</h1>
-                            <p>${data.genres}</p>
-                            <p>${data.date_published}</p>
-                            <p>Duration: ${data.duration}</p>
-                            <p>Country of origin: ${data.countries}</p>
-                            <p>Rated: ${data.rated}</p>
-                            <p>Imdb score: ${data.imdb_score}</p>
-                        </div>
-                    </div>
-                    <p>Directors: ${data.directors}</p>
-                    <p>Actors: ${data.actors}</p>
-                    <p>Box office result: ${data.worldwide_gross_income}</p>
-                    <p>Description: ${data.description}</p>
-                `
-            }
-            displayModalData()
-            setTimeout(() => {
-                closeModal()
-            }, 1000)
-            
-        })
-    })
-}
 
 const closeModal = () => {
     document
