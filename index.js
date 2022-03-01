@@ -15,7 +15,7 @@ const displayBestMovie = async() => {
     document.getElementById("best-movie").innerHTML = `
     <div id="best-movie-text">
         <h1>${bestMovie.title}</h1>
-        <button>Play</button>
+        <button id="play-btn">Play</button>
     </div>
     <div id="best-movie-image" style="background-image: linear-gradient(to right, #000 0%, transparent 20%), url(${bestMovie.image_url})">
         <img src=${bestMovie.image_url} alt="Movie poster"/>
@@ -25,8 +25,8 @@ const displayBestMovie = async() => {
 displayBestMovie();
 
 
-const displayMoviesSection = async(url, section, title) => {
-    await fetchData(url)
+const displayMoviesSection = async(id, section, title) => {
+    await fetchData("http://localhost:8000/api/v1/titles/?" + id)
     const moviesToDisplay = [];
     data.results.map(movie => (
         moviesToDisplay.push(movie)
@@ -44,29 +44,72 @@ const displayMoviesSection = async(url, section, title) => {
     
     section.innerHTML = `
         <h2>${title}</h2>
-        <div class="movies">
-        ${moviesToDisplay
-            .map(movie => (`<img src=${movie.image_url} alt="Movie poster"/>`))
-            .join("")}
+        <div id="movies-container">
+            <button id="go-left" class="carousel-btn">
+                <img src="assets/arrow.svg" alt="Left arrow" class="arrow"/>
+            </button>
+            <div class="movies">
+                ${moviesToDisplay
+                    .map(movie => (`<img src=${movie.image_url} alt="Movie poster" class="movie-img"/>`))
+                    .join("")}
+            </div>
+            <button id="go-right" class="carousel-btn">
+                <img src="assets/arrow.svg" alt="Right arrow" id="right-arrow" class="arrow"/>
+            </button>
         </div>
         `
-
     displayModal(moviesToDisplay)
+    scrollLeft()
+    scrollRight()
+}
+
+
+const scrollLeft = () => {
+    document
+        .querySelector("#go-left")
+        .addEventListener("click", (e) => {
+            let movieWidth = document.querySelector(".movie-img").getBoundingClientRect().width;
+            let scrollDistance = movieWidth * 2;
+            document
+                .querySelector(".movies")
+                .scrollBy({
+                    top: 0,
+                    left: -scrollDistance,
+                    behavior: "smooth"
+                })
+        })
+}
+
+const scrollRight = () => {
+    document
+        .querySelector("#go-right")
+        .addEventListener("click", (e) => {
+            let movieWidth = document.querySelector(".movie-img").getBoundingClientRect().width;
+            let scrollDistance = movieWidth * 2;
+            document
+                .querySelector(".movies")
+                .scrollBy({
+                    top: 0,
+                    left: +scrollDistance,
+                    behavior: "smooth"
+                })
+        })
 }
 
 const displayModal = (moviesToDisplay) => {
-    const movies = document.querySelectorAll("img")
+    const movies = document.querySelectorAll(".movie-img")
     movies.forEach(function (movie) {
         movie.addEventListener("click", (e) => {
             const movieSelected = moviesToDisplay.filter(movieToDisplay => movieToDisplay.image_url === e.explicitOriginalTarget.src)
             modalSection.appendChild(modalDiv)
             modalDiv.classList.add("open-modal")
             const displayModalData = async() => {
+                console.log(e)
                 await fetchData(movieSelected[0].url)
                 modalDiv.innerHTML = `
                     <img src="assets/close.svg" alt="Close button" id="close-button"/>
                     <div id="header">
-                        <img src=${data.image_url} alt="Movie poster"/>
+                        <img src=${data.image_url} alt="Movie poster" id="modal-img"/>
                         <div id="movie-main-infos">
                             <h1>${data.title}</h1>
                             <p>${data.genres}</p>
@@ -98,11 +141,10 @@ const closeModal = () => {
         .addEventListener("click", (e) => {
             modalSection.removeChild(modalDiv)
         })
-    
 }
 
 
-displayMoviesSection("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score", document.getElementById("top-rated-movies"), "Top rated movies");
-displayMoviesSection("http://localhost:8000/api/v1/titles/?genre=thriller", document.getElementById("thriller-movies"), "Thriller");
-displayMoviesSection("http://localhost:8000/api/v1/titles/?lang=french", document.getElementById("french-movies"), "French movies");
-displayMoviesSection("http://localhost:8000/api/v1/titles/?min_year=2000&max_year=2009", document.getElementById("movies-from-2000s"), "Movies from the 2000s");
+displayMoviesSection("sort_by=-imdb_score", document.getElementById("top-rated-movies"), "Top rated movies");
+displayMoviesSection("genre=thriller", document.getElementById("thriller-movies"), "Thriller");
+displayMoviesSection("lang=french", document.getElementById("french-movies"), "French movies");
+displayMoviesSection("min_year=2000&max_year=2009", document.getElementById("movies-from-2000s"), "Movies from the 2000s");

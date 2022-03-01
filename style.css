@@ -40,7 +40,7 @@ nav li {
   font-size: 28px;
 }
 
-button {
+#play-btn {
   background-color: white;
   border: none;
   text-transform: uppercase;
@@ -49,11 +49,13 @@ button {
   padding: 8px 12px;
   margin-top: 16px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .movies {
   display: flex;
-  overflow: scroll;
+  overflow-x: hidden;
+  margin: 0 20px;
 }
 
 #best-movie-image {
@@ -64,7 +66,28 @@ button {
   text-align: center;
 }
 
-section img {
+#movies-container {
+  display: flex;
+  align-items: center;
+}
+
+.carousel-btn {
+  height: 40px;
+  width: 40px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.arrow {
+  height: 20px;
+}
+
+#right-arrow {
+  transform: scaleX(-1);
+}
+
+section .movie-img {
   height: 270px;
 }
 
@@ -78,8 +101,9 @@ section img {
   border-bottom: 8px solid black;
 }
 
-.categories img {
+.categories .movie-img {
   margin: 24px;
+  cursor: pointer;
 }
 
 .open-modal {
@@ -104,13 +128,17 @@ section img {
   margin-bottom: 32px;
 }
 
+#modal-img {
+  height: 270px;
+}
+
 #movie-main-infos {
-  margin: 32px 40px;
+  margin: 32px 0 32px 40px;
 }
 
 #close-button {
   width: 16px;
   position: absolute;
   right: 32px;
-  top: -100px;
+  cursor: pointer;
 }
