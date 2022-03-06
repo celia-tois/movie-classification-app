@@ -102,9 +102,8 @@ const displayModal = (moviesToDisplay, selector) => {
         (movieToDisplay) =>
           movieToDisplay.image_url ===
           (movies.length == 1
-            ? e.explicitOriginalTarget.parentElement.parentElement.children[1]
-                .children[0].src
-            : e.explicitOriginalTarget.src)
+            ? movieToDisplay.image_url
+            : e.target.getAttribute('src'))
       );
       modalSection.appendChild(modalDiv);
       modalDiv.classList.add("open-modal");
