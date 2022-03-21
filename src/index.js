@@ -98,6 +98,9 @@ const displayModal = (moviesToDisplay, selector) => {
   const movies = document.querySelectorAll(selector);
   movies.forEach(function (movie) {
     movie.addEventListener("click", (e) => {
+      /* Filter moviesToDisplay array to find the movie which has the same image_url
+      as the movie clicked on, depending on the length of the array.
+      The array of length == 1 being the bestMovie array. */
       const movieSelected = moviesToDisplay.filter(
         (movieToDisplay) =>
           movieToDisplay.image_url ===
@@ -138,7 +141,7 @@ const displayModal = (moviesToDisplay, selector) => {
       displayModalData();
       setTimeout(() => {
         closeModal();
-      }, 1000);
+      }, 500);
     });
   });
 };
