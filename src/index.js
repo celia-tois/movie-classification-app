@@ -30,17 +30,24 @@ const displayMoviesSection = async (
   goRight
 ) => {
   await fetchData("http://localhost:8000/api/v1/titles/?" + id);
+  const quantityOfMoviesToDisplay = id.includes("sort_by=-imdb_score") ? 8 : 7;
   const moviesToDisplay = [];
-  data.results.map((movie) => moviesToDisplay.push(movie));
-  while (moviesToDisplay.length < 8) {
+  data.results.map((movie) => {
+    if (moviesToDisplay.length < quantityOfMoviesToDisplay) {
+      moviesToDisplay.push(movie);
+    }
+  });
+  while (moviesToDisplay.length < quantityOfMoviesToDisplay) {
     await fetchData(data.next);
     data.results.map((movie) => {
-      if (moviesToDisplay.length < 8) {
+      if (moviesToDisplay.length < quantityOfMoviesToDisplay) {
         moviesToDisplay.push(movie);
       }
     });
   }
-  moviesToDisplay.shift();
+  if (id.includes("sort_by=-imdb_score")) {
+    moviesToDisplay.shift();
+  }
 
   section.innerHTML = `
         <h2>${title}</h2>
