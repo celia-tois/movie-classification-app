@@ -45,11 +45,7 @@ $ cd ../path/to/the/file
 $ cd ocmovies-api-en
 ```
 
-4. Run the server:
-
-```
-$ pipenv run python manage.py runserver
-```
+4. Run the server with the commands given in the ocmovies-api-en repository
 
 5. Go to your favorite browser and enter in the search bar:
 
