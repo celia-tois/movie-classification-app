@@ -74,7 +74,7 @@ const displayMoviesSection = async (
 };
 
 const scrollLeft = (goLeft, movieContainer) => {
-  document.querySelector(`#${goLeft}`).addEventListener("click", (e) => {
+  document.querySelector(`#${goLeft}`).addEventListener("click", () => {
     let movieWidth = document
       .querySelector(".movie-img")
       .getBoundingClientRect().width;
@@ -88,7 +88,7 @@ const scrollLeft = (goLeft, movieContainer) => {
 };
 
 const scrollRight = (goRight, movieContainer) => {
-  document.querySelector(`#${goRight}`).addEventListener("click", (e) => {
+  document.querySelector(`#${goRight}`).addEventListener("click", () => {
     let movieWidth = document
       .querySelector(".movie-img")
       .getBoundingClientRect().width;
