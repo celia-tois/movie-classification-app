@@ -3,8 +3,7 @@ const modalSection = document.getElementById("modal");
 
 const fetchData = async (url) => {
   data = await fetch(url)
-    .then((res) => res.json())
-    .then((res) => res);
+    .then((res) => res.json());
 };
 
 const displayBestMovie = async () => {
