@@ -10,7 +10,7 @@ JustStreamIt is a web application allowing the user to see the top rated movies 
 2. Clone the repository:
 
 ```
-$ git clone https://github.com/CeliaTois/CeliaTOIS_6_17012022.git
+$ git clone https://github.com/celia-tois/movie-classification-app.git
 ```
 
 3. Go to the project folder:
